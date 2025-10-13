@@ -4,7 +4,7 @@ pkgs.mkShell{
   pandoc
   jupyter
   texliveTeTeX
-  texliveFull
+  texliveSmall
   ];
   shellHook = "jupyter-lab";
 }
