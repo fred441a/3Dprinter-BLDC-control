@@ -1,4 +1,4 @@
 { pkgs ? import <nixpkgs> {} }:
 pkgs.mkShell{
-  packages = [pkgs.kicad];
+  packages = with pkgs; [ kicad libreoffice];
 }
