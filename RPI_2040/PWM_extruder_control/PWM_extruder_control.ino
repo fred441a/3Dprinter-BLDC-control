@@ -1,3 +1,4 @@
+#define __FREERTOS 1
 #include <FreeRTOS.h>
 #define PWM_pin 16
 
