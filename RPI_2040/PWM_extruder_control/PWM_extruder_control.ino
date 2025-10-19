@@ -1,10 +1,10 @@
-#include <Arduino_FreeRTOS.h>
-#define PWM_pin 2
-#define Feedback_pin 16
+#include <FreeRTOS.h>
+#define PWM_pin 16
 
 
 void setup() {
-  pinMode(2,OUTPUT);
+  pinMode(PWM_pin,OUTPUT);
+  pinMode(16,OUTPUT);
   pinMode(LED_BUILTIN,OUTPUT);
 
   //set PWM freq
@@ -12,7 +12,13 @@ void setup() {
 
   //Turn on LED when booted
   digitalWrite(LED_BUILTIN,HIGH);
-
 }
 
-void loop() {}
+void loop() {
+
+//  digitalWrite(PWM_pin,LOW);
+  delay(2000);
+ // digitalWrite(PWM_pin,HIGH);
+  delay(2000);
+
+}
