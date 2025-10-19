@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "le33cz")(type "KiCad")(uri "${KIPRJMOD}/schematic/le33cz.kicad_sym")(options "")(descr ""))
+)
