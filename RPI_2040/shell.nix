@@ -2,7 +2,7 @@
 pkgs.mkShell{
 
   buildInputs = with pkgs; [
-	  arduino-ide
+      doxygen
 	  arduino-cli
 	  usbutils
 	  udev
