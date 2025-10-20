@@ -1,0 +1,30 @@
+% Step response of a fictive system with large overshoot and steady-state error
+
+% Define transfer function numerator and denominator
+num = 5 * [1 2];        % 5*(s + 2)
+den = [1 2 5];           % s^2 + 2s + 5
+
+% Create transfer function
+G = tf(num, den);
+
+% Display transfer function
+disp('Transfer Function G(s):');
+G
+
+% Step response
+figure;
+step(G);
+title('Step Response of G(s) = 5(s + 2) / (s^2 + 2s + 5)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+grid on;
+
+% Step response info
+info = stepinfo(G);
+disp('Step Response Characteristics:');
+disp(info);
+
+% Check steady-state value
+[y, t] = step(G);
+final_value = y(end);
+disp(['Final value (steady-state): ', num2str(final_value)]);
