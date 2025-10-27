@@ -1,10 +1,10 @@
 % Motor constants
-L   = 1.12E-6;
+L   = 1.12E-1;
 R   = 2.8;
 K_t = 0.22;
 K_e = 2.25;
 B   = 0.123;
-J   = 0.1;
+J   = 0.001;
 
 s = tf('s');
 
@@ -12,11 +12,15 @@ s = tf('s');
 H = K_t / ( (K_t*K_e) + (s*L + R) * (J*s + B) );
 
 % Controller parameters
-K_p = 200;
-T_i = 0.071;
+K_p = 20;
+T_i = 1;
 T_d = 0.02;
 
+
+%C = K_p ;
+%C = K_p * (1 + (1/(T_i*s)));
 C = K_p * (1 + (1/(T_i*s)) + (T_d*s));
+%C = K_p * (1 + (T_d*s));
 
 % Closed-loop systems
 T  = feedback(C*H, 1);
@@ -24,42 +28,28 @@ T  = feedback(C*H, 1);
 % Openloop system
 T1 = C*H;
 
+%step(T1)
+%margin(T1)
+%grid on
+pole(T);
+zero(T);
+
 % Enable or disable all printed output
-showDisplay = true;   % Set to false to suppress all printouts
 
-displayResults(H, T1, T, showDisplay);
-
-
+displayResults(T);
+%displayResults(H);
 
 %% ==============================================================
 % === All helper functions go below ============================
 
-function displayResults(H, T1, T, showDisplay)
-    % Only print if the flag is true
-    if ~showDisplay
-        return;
-    end
+function displayResults(system)
+    sysName = inputname(1);
 
     % Convert to zpk
-    Hzpk  = zpk(H);
-    T1zpk = zpk(T1);
-    Tzpk  = zpk(T);
+    SystemZpk  = zpk(system);
 
-    disp(' ')
-    disp('======================================')
-    disp('Zero–Pole–Gain (ZPK) forms:')
-    disp('======================================')
-    Hzpk
-    T1zpk
-    Tzpk
-
-    fprintf('\n======================================\n');
-    fprintf(' FACTORIZED FORMS (s + a)(s + b)...\n');
-    fprintf('======================================\n');
-
-    printFactorized('H',  Hzpk);
-    printFactorized('T1', T1zpk);
-    printFactorized('T',  Tzpk);
+    printFactorized(sysName,  SystemZpk);
+   
 end
 
 function printFactorized(name, sys)
