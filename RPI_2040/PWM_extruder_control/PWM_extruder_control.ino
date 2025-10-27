@@ -1,25 +1,11 @@
-#define __FREERTOS 1
-#include <FreeRTOS.h>
-#define PWM_pin 16
-
+#include "src/Serial_Debug_printer.h"
 
 void setup() {
-  pinMode(PWM_pin,OUTPUT);
-  pinMode(16,OUTPUT);
-  pinMode(LED_BUILTIN,OUTPUT);
+  SerialPrinter printer = new SerialPrinter(115200, DEBUG);
+  IOManager io = new IOManager();
 
-  //set PWM freq
-  analogWriteFreq(200);
-
-  //Turn on LED when booted
-  digitalWrite(LED_BUILTIN,HIGH);
+  Globals::CreateGlobals(printer,io);
+  
 }
 
-void loop() {
-
-//  digitalWrite(PWM_pin,LOW);
-  delay(2000);
- // digitalWrite(PWM_pin,HIGH);
-  delay(2000);
-
-}
+void loop() {}

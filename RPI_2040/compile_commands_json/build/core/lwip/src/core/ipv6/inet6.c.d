@@ -1,0 +1,25 @@
+/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/compile_commands_json/build/core/lwip/src/core/ipv6/inet6.c.o: \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1/cores/rp2040/lwip/src/core/ipv6/inet6.c \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1/cores/rp2040/lwip/src/core/ipv6/../../../../../../pico-sdk/lib/lwip/src/core/ipv6/inet6.c \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/lib/lwip/src/include/lwip/opt.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/lib/lwip/src/include/lwip/debug.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/lib/lwip/src/include/lwip/arch.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2_common/pico_lwip/include/arch/cc.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/common/pico_base_headers/include/pico.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/common/pico_base_headers/include/pico/types.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/common/pico_base_headers/include/pico/assert.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//include/rp2040/pico_base/pico/version.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/common/pico_base_headers/include/pico/config.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//include/rp2040/pico_base/pico/config_autogen.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1/cores/rp2040/../../pico-sdk/src/boards/include/boards/pico_w.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1/cores/rp2040/../../pico-sdk/src/rp2_common/cmsis/include/cmsis/rename_exceptions.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2040/pico_platform/include/pico/platform.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2_common/pico_platform_compiler/include/pico/platform/compiler.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2040/hardware_regs/include/hardware/platform_defs.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/common/pico_base_headers/include/pico/types.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2_common/pico_platform_sections/include/pico/platform/sections.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2_common/pico_platform_panic/include/pico/platform/panic.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2_common/pico_platform_common/include/pico/platform/common.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/addressmap.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/sio.h \
+ /home/fred441a/.arduino15/packages/rp2040/hardware/rp2040/5.2.1//pico-sdk/src/common/pico_base_headers/include/pico/error.h
