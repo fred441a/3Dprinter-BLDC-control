@@ -4,6 +4,9 @@ default_port: /dev/ttyACM0
 profiles:
   raspberry:
     fqbn: rp2040:rp2040:rpipico
-#    libraries:
-#      -dir:~/.arduino15/packages/rp2040/5.4.1/FreeRTOS-Kernel/include
+    port: /dev/ttyACM0
+    platforms:
+      - platform: rp2040:rp2040 (5.4.1)
+    libraries:
+      - FreeRTOS (11.1.0-3)
 
