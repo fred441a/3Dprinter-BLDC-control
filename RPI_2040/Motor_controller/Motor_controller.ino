@@ -10,14 +10,14 @@
 //HAS TO BE POWER OF 2!!!! 2^4=16
 #define resolution 16
 #define pwr_res 4
-#define pwm_period_ms 1112  //(1/899)*1000
+#define pwm_period_ms 1.112  //(1/899)*1000
 #define debug
 
 QueueHandle_t qPWM_measure;
 void Calculate_PWM(int sum) {
-  int avrg = (sum*1000)<<pwr_res;
+  int avrg = (sum * 1000) >> pwr_res;
 #ifdef debug
-  Serial.printf("avr: %i sum: %i \n", avrg, sum);
+  Serial.printf("avr: %i, sum: %i \n", avrg, sum);
 #endif
   BaseType_t err;
   err = xQueueSend(qPWM_measure, &avrg, 10);
@@ -42,7 +42,7 @@ void measure_PWM(void *pvParam) {
   for (;;) {
     static int sum = 0;
     static int i = 0;
-    const static int delay_time = (pwm_period_ms / resolution) / portTICK_RATE_MS;
+    const static float delay_time = (pwm_period_ms / resolution) / portTICK_RATE_MS;
 
     sum += digitalRead(encoder);
     i++;
