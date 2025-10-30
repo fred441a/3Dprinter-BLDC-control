@@ -12,7 +12,6 @@
 #define pwm_period_ms 1112  //(1/899)*1000
 
 
-
 QueueHandle_t qPWM_measure;
 SemaphoreHandle_t lPWM_measure_data;
 int PWM_measure_data[resolution];

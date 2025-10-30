@@ -1,26 +1,31 @@
 % Motor constants
-L   = 1.12E-1;
+L   = 1.12E-6;
 R   = 2.8;
 K_t = 0.22;
 K_e = 2.25;
 B   = 0.123;
-J   = 0.001;
+J   = 0.000498;
 
 s = tf('s');
 
 % motor transfere function H(s)
 H = K_t / ( (K_t*K_e) + (s*L + R) * (J*s + B) );
+H_zpk = zpk(H);
+H_poles = pole(H);
+H_pole1 = -H_poles(1);
+H_pole2 = -H_poles(2);
+H_gain = get(H_zpk, 'K');
 
-% Controller parameters
-K_p = 20;
-T_i = 1;
-T_d = 0.02;
+H_kp = 1/(H_pole2/H_gain)
 
+K_p = H_kp %196.4633;
+%T_i = 1;
+T_d = 1/H_pole1 %1/H_pole2 = 0.0013
 
 %C = K_p ;
 %C = K_p * (1 + (1/(T_i*s)));
-C = K_p * (1 + (1/(T_i*s)) + (T_d*s));
-%C = K_p * (1 + (T_d*s));
+%C = K_p * (1 + (1/(T_i*s)) + (T_d*s));
+C = K_p * (1 + (T_d*s));
 
 % Closed-loop systems
 T  = feedback(C*H, 1);
@@ -31,18 +36,19 @@ T1 = C*H;
 %step(T1)
 %margin(T1)
 %grid on
-pole(T);
-zero(T);
 
-% Enable or disable all printed output
+%[pidC, info] = pidtune(H, 'PID');
 
-displayResults(T);
-%displayResults(H);
+displayResult(H)
+displayResult(T)
+
+step(T)
+grid on
 
 %% ==============================================================
 % === All helper functions go below ============================
 
-function displayResults(system)
+function displayResult(system)
     sysName = inputname(1);
 
     % Convert to zpk
