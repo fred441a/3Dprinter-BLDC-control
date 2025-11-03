@@ -9,14 +9,9 @@
 
 //HAS TO BE POWER OF 2!!!! 2^4=16
 #define resolution 16
-<<<<<<< HEAD
-#define pwm_period_ms 1112  //(1/899)*1000
-
-=======
 #define pwr_res 4
 #define pwm_period_ms 1.112  //(1/899)*1000
 #define debug
->>>>>>> 6338ea8aeae3ab6847aeea7d6a6aa76ff425b713
 
 QueueHandle_t qPWM_measure;
 void Calculate_PWM(int sum) {
