@@ -1,0 +1,12 @@
+default_fqbn: rp2040:rp2040:rpipico
+default_port: /dev/ttyACM0
+
+profiles:
+  raspberry:
+    fqbn: rp2040:rp2040:rpipico
+    port: /dev/ttyACM0
+    platforms:
+      - platform: rp2040:rp2040 (5.4.1)
+    libraries:
+      - FreeRTOS (11.1.0-3)
+
