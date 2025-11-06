@@ -31,3 +31,16 @@ void loop() {
   };
   Serial.println(speed);
 }
+
+void loop() {
+  static int angle, angle2 = 0;
+  angle = get_angle();
+  delay(100);
+  angle2 = get_angle();
+  //Serial.printf("angle: %i,angle2: %i,speed: %i \n",angle,angle2,abs(angle2-angle));
+  int speed = abs(angle2-angle);
+  if(angle > angle2){
+    speed = (1000-angle)+angle2;
+  };
+  Serial.println(speed);
+}
