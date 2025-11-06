@@ -1,7 +1,7 @@
 const int resolution = 128;
 const int encoder = 17;
 const int flipPin = 16;
-const int samSize = 32;
+const int samSize = 18;
 
 int posArray1[samSize];
 int posArray2[samSize];
@@ -64,7 +64,7 @@ void loop() {
 
       if (speedArray[j] < 58 ) {
         speedArray[j] = avrSpeed;
-        Serial.println("error");
+        //Serial.println("error");
 
       } else {
         speedArray[j] = (1000 - posArray1[j]) + posArray2[j] - 58;
@@ -73,9 +73,17 @@ void loop() {
     }
     sumSpeed += speedArray[j];
   }
+
   avrSpeed = (sumSpeed / samSize);
   //Serial.printf("sumSpeed:%i \n", sumSpeed);
+
+  //Serial.printf("position1:%i \n", posArray1[1]);
+    //Serial.printf("position2:%i \n", posArray2[1]);
+
+  if (avrSpeed > 20){
   Serial.printf("avrSpeed:%i \n", avrSpeed);
-  Serial.printf("position:%i \n", posArray1[1]);
+  //Serial.printf("position:%i \n", posArray1[1]);
+  }
+
 
 }
