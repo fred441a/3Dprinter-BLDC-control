@@ -1,5 +1,5 @@
 import csv
-filename = "scope_2.csv";
+filename = "scope_0.csv";
 fields = []  # Column names
 rows = []    # Data rows
 
@@ -34,14 +34,14 @@ for row in rows:
                 time=float(row[0])
         else:
             if float(row[1]) < 2.0:
-                trigger = True
+                trigger = False
                 pulse_width.append(float(row[0])-time)
     except:
         print("error: " +row[1])
 
 print(pulse_width)
 
-savefile = "scope_2_width.csv"
+savefile = "scope_0_widthP2.csv"
 with open(savefile, 'w') as csvfile:
     csvwriter = csv.writer(csvfile)        # Create writer object
     csvwriter.writerow(pulse_width)              # Write multiple rows
