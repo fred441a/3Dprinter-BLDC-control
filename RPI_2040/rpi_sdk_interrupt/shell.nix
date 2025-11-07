@@ -10,9 +10,12 @@ pkgs.mkShell{
 	  cmake
       gcc-arm-embedded
 	  gnumake
+	  cmake
+	  git
 	  ];
 
   shellHook = ''
+  git submodule update --init
   export PICO_SDK_PATH=$(pwd)/pico-sdk/
   export PICO_BOARD=pico_w
   alias monitor='tio --map INLCRNL,ODELBS /dev/ttyACM0'

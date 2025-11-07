@@ -1,7 +1,0 @@
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/pioasm.dir
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/edit_cache.dir
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/rebuild_cache.dir
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/list_install_components.dir
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/install.dir
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/install/local.dir
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm/CMakeFiles/install/strip.dir

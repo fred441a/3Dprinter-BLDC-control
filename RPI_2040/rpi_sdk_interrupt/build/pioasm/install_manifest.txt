@@ -1,5 +1,0 @@
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm-install/pioasm/pioasm
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm-install/pioasm/pioasmTargets.cmake
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm-install/pioasm/pioasmTargets-release.cmake
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm-install/pioasm/pioasmConfig.cmake
-/home/fred441a/Documents/ESD7/3Dprinter-BLDC-control/RPI_2040/rpi_sdk_interrupt/build/pioasm-install/pioasm/pioasmConfigVersion.cmake

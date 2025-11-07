@@ -49,10 +49,10 @@ int main() {
     if (old_meas > raw && abs(old_meas - raw) > 0.1) {
       angular_momentum = 360 - (map(old_meas) - degree);
     } else {
-      angular_momentum = degree - map(old_meas);
+      angular_momentum = degree - map(old_meas)/909.1;
     }
 	old_meas = raw;
-    sleep_ms(2);
+    sleep_us(1100);
 
     printf("%f,%f,%f\n", raw, degree, angular_momentum);
   }
