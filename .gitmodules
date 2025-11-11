@@ -1,6 +1,6 @@
 [submodule "RPI_2040/rpi_sdk_interrupt/pico-sdk"]
-	path = RPI_2040/rpi_sdk_interrupt/pico-sdk
+	path = RPI_2040/rpi_sdk_pwmmeasure/pico-sdk
 	url = git@github.com:raspberrypi/pico-sdk.git
 [submodule "RPI_2040/rpi_motor_control/pico-sdk"]
-	path = RPI_2040/rpi_motor_control/pico-sdk
+	path = RPI_2040/rpi_sdk_interrupt/pico-sdk
 	url = git@github.com:raspberrypi/pico-sdk.git
