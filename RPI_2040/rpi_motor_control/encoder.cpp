@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#include <cstdio>
 #include <math.h>
 #include <sys/types.h>
 
@@ -11,17 +12,22 @@
 #include "hardware/pwm.h"
 #include "pico/stdlib.h"
 
+#pragma once
 class Encoder {
 private:
-  const float sample_time_ms = 2.2;
-  const float sample_time = 0.00022;
+  const float sample_time = 0.01;
+  const float sample_time_ms = sample_time * pow(10, 3);
   uint gpio, slice_num;
   float map_degree(float input) { return 379.346 * input - 7.966; };
   float map_radians(float input) { return 66.2084 * input - 1.39033; };
+
   float measure_duty_cycle() {
-    pwm_set_enabled(slice_num, true);
+    //    pwm_set_enabled(slice_num, true);
+
+    pwm_set_counter(slice_num, 0);
     sleep_ms(sample_time_ms);
-    return pwm_get_counter(slice_num) / clock_get_hz(clk_sys) * sample_time;
+    return pwm_get_counter(slice_num) /
+           (float)(clock_get_hz(clk_sys) / 100 * sample_time);
   }
 
 public:
@@ -32,8 +38,8 @@ public:
 
     pwm_config cfg = pwm_get_default_config();
     pwm_config_set_clkdiv_mode(&cfg, PWM_DIV_B_HIGH);
-    pwm_config_set_clkdiv(&cfg, 1);
-    pwm_init(slice_num, &cfg, false);
+    pwm_config_set_clkdiv(&cfg, 100);
+    pwm_init(slice_num, &cfg, true);
     gpio_set_function(gpio, GPIO_FUNC_PWM);
   }
 

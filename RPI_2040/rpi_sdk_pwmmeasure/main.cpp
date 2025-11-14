@@ -33,6 +33,7 @@ float measure_duty_cycle(uint gpio) {
   pwm_set_enabled(slice_num, false);
   float counting_rate = clock_get_hz(clk_sys) / 100;
   float max_possible_count = counting_rate * 0.01;
+  printf("%lld\n", pwm_get_counter(slice_num));
   return pwm_get_counter(slice_num) / max_possible_count;
 }
 
@@ -49,9 +50,9 @@ int main() {
     if (old_meas > raw && abs(old_meas - raw) > 0.1) {
       angular_momentum = 360 - (map(old_meas) - degree);
     } else {
-      angular_momentum = degree - map(old_meas)/909.1;
+      angular_momentum = degree - map(old_meas) / 909.1;
     }
-	old_meas = raw;
+    old_meas = raw;
     sleep_us(1100);
 
     printf("%f,%f,%f\n", raw, degree, angular_momentum);
