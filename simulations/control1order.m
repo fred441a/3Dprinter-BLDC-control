@@ -3,22 +3,28 @@ R   = 2.8;
 K_t = 0.22;
 K_e = 2.25;
 B   = 0.123;
-J   = 0.026;
-
+J   = 0.00227;
 s = tf('s');
 
 H_o = (K_t/(R))*(1/(s*J + B))*K_e;
+
+% Optional for tau as "input" 
+Mc = 1/( J *s + B);
+Ec = K_t/(R);
+Tau_c = feedback(Mc,Ec*K_e);
 
 % motor transfere function H(s). Closed loop
 H_c = K_t / ( (K_t*K_e) + (R) * (J*s + B) );
 H_zpk = zpk(H_c);
 
 % motor transfere function H(s)
-H_pole = pole(H_c)
-H_gain = get(H_zpk, 'K')
+H_pole = pole(H_c);
+H_gain = get(H_zpk, 'K');
 
-K_p = 5.4;
-T_i = 660;
+[pidC, info] = pidtune(H_c, 'PID');
+
+K_p = 5;
+T_i = 110;
 %T_d = 1/H_pole; %1/H_pole2 = 0.0013
 
 %C = K_p ;
@@ -26,18 +32,21 @@ C = K_p * (1 + (1/(T_i*s)));
 %C = K_p * (1 + (1/(T_i*s)) + (T_d*s));
 %C = K_p * (1 + (T_d*s));
 
-[pidC, info] = pidtune(H_c, 'PID');
-
 T  = feedback(C*H_c, 1);
 
 %displayResult(H_c)
-displayResult(T);
+%displayResult(T);
+%pidC;
 
-%step(T);
+pid_o = H_c*C;
+
+%displayResult(H_c)
+
+%margin(pid_o)
 %grid on;
 
-bode(H_c)
-%grid on
+step(H_c)
+grid on;
 
 %% ==============================================================
 % === All helper functions go below ============================

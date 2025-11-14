@@ -11,6 +11,9 @@
 #include "hardware/pwm.h"
 #include "pico/stdlib.h"
 
+#define NUM_SECTIONS 2
+
+
 const uint MEASURE_PIN = 17;
 
 // maps the input percent to an actual degree
@@ -36,6 +39,35 @@ float measure_duty_cycle(uint gpio) {
   return pwm_get_counter(slice_num) / max_possible_count;
 }
 
+typedef struct {
+    float b0, b1, b2;
+    float a1, a2;
+    float w1, w2;
+} Biquad;
+
+Biquad sections[NUM_SECTIONS] = {
+    { 1.0000f,  1.2245f,  1.0000f,  -0.3490f,  0.3285f,  0, 0 },
+    { 1.0000f,  0.2333f,  1.0000f,   0.0094f,  0.9023f,  0, 0 }
+};
+
+float overallGain = 1.0f;
+
+static inline float biquad_process(Biquad *s, float x) {
+    float y = s->b0 * x + s->w1;
+    float new_w1 = s->b1 * x - s->a1 * y + s->w2;
+    float new_w2 = s->b2 * x - s->a2 * y;
+    s->w1 = new_w1;
+    s->w2 = new_w2;
+    return y;
+}
+
+float iir_filter(float x) {
+    for (int i = 0; i < NUM_SECTIONS; ++i)
+        x = biquad_process(&sections[i], x);
+    return x * overallGain;
+}
+
+
 int main() {
   stdio_init_all();
   printf("RAW,DEGREE,ANGULAR_MOMENTUM\n");
@@ -53,6 +85,9 @@ int main() {
     }
 	old_meas = raw;
     sleep_us(1100);
+
+    float y = iir_filter(angular_momentum);
+    printf("in=%f out=%f\n", angular_momentum, y);
 
     printf("%f,%f,%f\n", raw, degree, angular_momentum);
   }

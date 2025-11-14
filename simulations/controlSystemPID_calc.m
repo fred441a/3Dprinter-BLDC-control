@@ -4,7 +4,7 @@ R   = 2.8;
 K_t = 0.22;
 K_e = 2.25;
 B   = 0.123;
-J   = 0.000498;
+J   = 0.027;
 
 s = tf('s');
 
@@ -16,11 +16,11 @@ H_pole1 = -H_poles(1);
 H_pole2 = -H_poles(2);
 H_gain = get(H_zpk, 'K');
 
-H_kp = 1/(H_pole2/H_gain)
+H_kp = 1/(H_pole2/H_gain);
 
-K_p = H_kp %196.4633;
+K_p = H_kp; %196.4633;
 %T_i = 1;
-T_d = 1/H_pole1 %1/H_pole2 = 0.0013
+T_d = 1/H_pole1; %1/H_pole2 = 0.0013
 
 %C = K_p ;
 %C = K_p * (1 + (1/(T_i*s)));
@@ -39,10 +39,10 @@ T1 = C*H;
 
 %[pidC, info] = pidtune(H, 'PID');
 
-displayResult(H)
-displayResult(T)
+%displayResult(H)
+%displayResult(T)
 
-step(T)
+step(H*6)
 grid on
 
 %% ==============================================================
