@@ -1,0 +1,23 @@
+% Define the motor parameters
+Ke = 2.25;  % Back EMF constant (V/rad/s)
+Kt = 0.22;  % Torque constant (Nm/A)
+B = 0.123;   % Damping coefficient (Nms/rad)
+R = 2.8;     % Resistance (Ohm)
+J = 0.0037;  % Inertia (kg*m^2)
+
+s = tf("s");
+
+% Transfer function parameters
+num = [Kt];  % Numerator of the transfer function
+den = [R*(s*J+B)+Kt*Ke];  % Denominator of the transfer function
+
+% Create the transfer function
+sys = tf(num, den);
+
+% Generate the step response
+figure;
+step(sys);
+title('Step Response of the Motor');
+xlabel('Time (seconds)');
+ylabel('Response');
+grid on;
