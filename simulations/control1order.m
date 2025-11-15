@@ -1,52 +1,22 @@
 % Motor constants
 R   = 2.8;
 K_t = 0.22;
-K_e = 2.25;
-B   = 0.123;
-J   = 0.00227;
+K_e = 0.36;
+B   = 0.0197;
+J   = 3.74E-3;
 s = tf('s');
 
-H_o = (K_t/(R))*(1/(s*J + B))*K_e;
+% Transfer function H1(s)
+Hp = 2.5 / (s*0.08 + 1);
 
-% Optional for tau as "input" 
-Mc = 1/( J *s + B);
-Ec = K_t/(R);
-Tau_c = feedback(Mc,Ec*K_e);
+% Motor closed-loop transfer function H_c(s)
+Hd = (K_t / ( (K_t*K_e) + R * (J*s + B) ));
 
-% motor transfere function H(s). Closed loop
-H_c = K_t / ( (K_t*K_e) + (R) * (J*s + B) );
-H_zpk = zpk(H_c);
-
-% motor transfere function H(s)
-H_pole = pole(H_c);
-H_gain = get(H_zpk, 'K');
-
-[pidC, info] = pidtune(H_c, 'PID');
-
-K_p = 5;
-T_i = 110;
-%T_d = 1/H_pole; %1/H_pole2 = 0.0013
-
-%C = K_p ;
-C = K_p * (1 + (1/(T_i*s)));
-%C = K_p * (1 + (1/(T_i*s)) + (T_d*s));
-%C = K_p * (1 + (T_d*s));
-
-T  = feedback(C*H_c, 1);
-
-%displayResult(H_c)
-%displayResult(T);
-%pidC;
-
-pid_o = H_c*C;
-
-%displayResult(H_c)
-
-%margin(pid_o)
-%grid on;
-
-step(H_c)
-grid on;
+% Plot both on the same figure
+figure;
+step(Hp, Hd)
+legend show
+grid on
 
 %% ==============================================================
 % === All helper functions go below ============================
