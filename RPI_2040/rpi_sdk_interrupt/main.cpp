@@ -3,6 +3,8 @@
 #include "pico/time.h"
 #include <stdio.h>
 
+#define NUM_SECTIONS 2
+
 typedef struct {
     float b0, b1, b2;
     float a1, a2;
