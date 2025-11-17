@@ -7,11 +7,10 @@ tr = 0.1758
 
 K = 2.5
 
-%system sample time
-Ts = 0.01
+%system sample t
 
 %bandwidth of system (in this case the natural freq of the motor wn)
-wb = 1/(10*Ts)
+wb = 
 % dampening faktor (calculated with chatgpt) 5%
 zigma = 0.7
 
