@@ -13,11 +13,24 @@ Hp = 2.5 / (s*0.08 + 1);
 Hd = (K_t / ( (K_t*K_e) + R * (J*s + B) ));
 
 % Plot both on the same figure
-figure;
-step(Hp, Hd)
-legend show
-grid on
+%figure;
+%step(Hp, Hd)
+%legend show
+%grid on
 
+Kp = 5;
+Ti = -10;
+c = Kp * (1 + (1/Ti*s));
+
+Tl = -(R)/(R*(s*J + B) + K_e*K_t);
+
+Tlc = -(R*Kp*(Ti*s +1))/(R*(s*J+B) + K_t*K_e);
+
+%bode(Tl);
+zpk(Tl)
+zpk(Tlc)
+bode(Tlc)
+step(Tlc)
 %% ==============================================================
 % === All helper functions go below ============================
 

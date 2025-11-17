@@ -18,8 +18,8 @@ private:
   const float sample_time = 0.01;
   const float sample_time_ms = sample_time * pow(10, 3);
   uint gpio, slice_num;
-  float map_degree(float input) { return 379.346 * input - 7.966; };
-  float map_radians(float input) { return 66.2084 * input - 1.39033; };
+  float map_degree(float input) { return 382.17 * input - 11.083; };
+  float map_radians(float input) { return 6.669 * input - 0.193; };
 
   float measure_duty_cycle() {
     //    pwm_set_enabled(slice_num, true);
@@ -50,9 +50,9 @@ public:
     float meas = get_degree();
     float meas2 = get_degree();
     if (meas > meas2 && abs(meas - meas2) > 30) {
-      return ((1 - abs(meas - meas2)) * (1 / sample_time));
+      return ((1 - abs(meas - meas2)) / sample_time);
     } else {
-      return (meas2 - meas) * (1 / sample_time);
+      return (meas2 - meas) /sample_time;
     }
   };
 
@@ -60,9 +60,9 @@ public:
     float meas = get_radian();
     float meas2 = get_radian();
     if (meas > meas2 && abs(meas - meas2) > 0.5235987) {
-      return (1 - abs(meas - meas2)) * (1 / sample_time);
+      return (1 - abs(meas - meas2)) / sample_time;
     } else {
-      return (meas2 - meas) * (1 / sample_time);
+      return (meas2 - meas) / sample_time;
     }
   };
 };
