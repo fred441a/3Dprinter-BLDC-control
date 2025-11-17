@@ -2,16 +2,16 @@
 
 class PID {
 private:
-  float Kp, Ti, Td;
+  float Kp, Ki, Kd;
 
 public:
-  PID(float Kp, float Ti, float Td) : Kp(Kp), Ti(Ti), Td(Td) {}
+  PID(float Kp, float Ki, float Kd) : Kp(Kp), Ki(Ki), Kd(Kd) {}
   double voltage(double ws_measure, double ws_wanted) {
     static double integral = 0;
     static double last_e = 0;
     double e = ws_wanted - ws_measure;
-    return (Kp * e) + (Ti * integral) + (Td * (last_e - e));
+    integral += Ki * e;
+    return (Kp * e) + integral + (Kd * (last_e - e));
     last_e = e;
-    integral += e;
   };
 };
