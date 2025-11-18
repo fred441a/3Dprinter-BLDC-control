@@ -36,10 +36,13 @@ Motor_s = stepinfo(H_c);
 Control_s.RiseTime;
 Motor_s.RiseTime;
 
-hold on
+sysD = c2d(system, 0.012, 'zoh');
+step(sysD);
+
+%hold on
 %bode(system);
 %bode(H_c)
-step(system);
-step(H_c);
-hold off
-grid on
+%step(system);
+%step(H_c);
+%hold off
+%grid on

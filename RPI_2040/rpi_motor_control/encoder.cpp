@@ -13,7 +13,8 @@
 #include "pico/stdlib.h"
 
 #pragma once
-class Encoder {
+class Encoder
+{
 private:
   const float sample_time = 0.01;
   const float sample_time_ms = sample_time * pow(10, 3);
@@ -21,7 +22,8 @@ private:
   float map_degree(float input) { return 379.346 * input - 7.966; };
   float map_radians(float input) { return 6.6138 * input - 1.32227; };
 
-  float measure_duty_cycle() {
+  float measure_duty_cycle()
+  {
     //    pwm_set_enabled(slice_num, true);
 
     pwm_set_counter(slice_num, 0);
@@ -32,7 +34,8 @@ private:
 
 public:
   Encoder() { Encoder(17); }
-  Encoder(uint pin) : gpio(pin) {
+  Encoder(uint pin) : gpio(pin)
+  {
     assert(pwm_gpio_to_channel(gpio) == PWM_CHAN_B);
     slice_num = pwm_gpio_to_slice_num(gpio);
 
@@ -46,22 +49,30 @@ public:
   float get_raw() { return measure_duty_cycle(); };
   float get_degree() { return map_degree(measure_duty_cycle()); };
   float get_radian() { return map_radians(measure_duty_cycle()); };
-  float get_degPs() {
+  float get_degPs()
+  {
     float meas = get_degree();
     float meas2 = get_degree();
-    if (meas > meas2 && abs(meas - meas2) > 30) {
-      return ((1 - abs(meas - meas2))  / sample_time);
-    } else {
+    if (meas > meas2 && abs(meas - meas2) > 30)
+    {
+      return ((1 - abs(meas - meas2)) / sample_time);
+    }
+    else
+    {
       return (meas2 - meas) / sample_time;
     }
   };
 
-  float get_ws() {
+  float get_ws()
+  {
     float meas = get_radian();
     float meas2 = get_radian();
-    if (meas > meas2 && abs(meas - meas2) > 0.5235987) {
+    if (meas > meas2 && abs(meas - meas2) > 0.5235987)
+    {
       return (1 - abs(meas - meas2)) / sample_time;
-    } else {
+    }
+    else
+    {
       return (meas2 - meas) / sample_time;
     }
   };

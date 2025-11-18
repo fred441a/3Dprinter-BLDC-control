@@ -6,18 +6,17 @@
 #include "step_response.cpp"
 
 // const uint gpio = 17;
-const double wanted_ws = 9;
-const float Kaw = 3.2;
+const float wanted_ws = 6;
 
 int main() {
   stdio_init_all();
+  sleep_ms(5000);
   Encoder *encoder = new Encoder(19);
-  step_response(encoder);
+  // step_response(encoder);
   Motor *motor = new Motor(16, 0.3599);
-  PID *pid = new PID(0.048, 3.2, 0, Kaw);
+  PID *pid = new PID(0.045, 3, 0);
 
   while (true) {
-      printf("BOOBOO");
     float ws = encoder->get_ws();
     float voltage = pid->voltage(encoder->get_ws(), wanted_ws);
     printf("with AW: voltage:%f,WS:%f\n", voltage, ws);

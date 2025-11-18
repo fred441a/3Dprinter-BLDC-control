@@ -3,31 +3,39 @@
 class PID
 {
 private:
-  float Kp, Ki, Kd, Kaw;
-  float limit = 16;
+  float Kp, Ki, Kd;
+  float limit = 6;
 
 public:
-  PID(float Kp, float Ki, float Kd, float Kaw) : Kp(Kp), Ki(Ki), Kd(Kd), Kaw(Kaw) {}
-  double voltage(double ws_measure, double ws_wanted)
+  PID(float Kp, float Ki, float Kd) : Kp(Kp), Ki(Ki), Kd(Kd) {}
+  float voltage(float ws_measure, float ws_wanted)
   {
-    static double integral = 0;
-    static double last_e = 0;
-    static float last_pid = 0;
-    static float last_pidPure = 0;
-    static float anti_windup = 0;
+    static float integral = 0;
+    static float last_e = 0;
     static float pid = 0;
-    double e = ws_wanted - ws_measure;
+    static float Kaw = ((Ki/Kp));
+    float e = ws_wanted - ws_measure;
+    float derivative = (Kd * (last_e - e));
+    derivative = 0;
 
-    anti_windup = (last_pid-last_pidPure) * Kaw;
-    integral += (Ki+anti_windup) * e;
-    pid = (Kp * e) + integral + (Kd * (last_e - e));
-    if (pid > limit)
-    {
-      last_pidPure = pid;
-      pid = limit;
-    }
+    float pidPure = (Kp * e) + integral + derivative;
+    printf("ws_wanted:%f , ws_measured:%f, errorTerm:%f \n", ws_wanted, ws_measure, e);
+    printf("pidPure:%f\n", pidPure);
+
+    // anti Windup scheme. If above, clamp, below set 0.:
+    float pidSat = pidPure;
+    if (pidSat > limit)
+      pidSat = limit;
+    if (pidSat < -limit)
+      pidSat = 0;
+
+    printf("pidSat:%f \n", pidSat);
+
+    // update terms for next time
+    float anti_windup = (Kaw * (pidSat - pidPure));
+    integral += (Ki * e + anti_windup)*0.012;
+
     last_e = e;
-    last_pid = pid;
-    return pid;
+    return pidSat;
   };
 };
