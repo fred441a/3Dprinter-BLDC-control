@@ -6,20 +6,47 @@
 #include "step_response.cpp"
 
 // const uint gpio = 17;
-const double wanted_ws = 9;
+const float wanted_ws = 10;
 
-int main() {
+const float T = 0.01;
+
+int main()
+{
   stdio_init_all();
+  sleep_ms(10000);
   Encoder *encoder = new Encoder(19);
-  step_response(encoder);
+
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(0.048, 3.2, 0);
+  /*
+  motor->set_voltage(2);
+  step_response(encoder);
+  */
 
-  while (true) {
-    float ws = encoder->get_ws();
-    float voltage = pid->voltage(encoder->get_ws(), wanted_ws);
-    printf("voltage:%f,WS:%f\n", voltage, ws);
-    motor->set_voltage(voltage);
+  /*
+  for (float i = 0; i <= 5; i = i + 0.25)
+  {
+    float ws;
+      motor->set_voltage(i);
+
+      // wait for some time for motor to reach steady speed
+      for (int j = 0; j < 500; j++)
+      {
+      ws = encoder->get_ws(); // read speed after settling
+      }
+
+      printf("i:%f, ws:%f \n", i, ws);
+  }
+  */
+
+  while (true)
+  {
+    float ws;
+    ws = encoder->get_ws();
+    // float voltage = pid->voltage(ws, wanted_ws);
+    float voltage2 = pid->voltageDis(ws, wanted_ws, T);
+    printf("with AW: voltage:%f,WS:%f\n", voltage2, ws);
+    motor->set_voltage(voltage2);
     // sleep_ms(1000);
   }
 
