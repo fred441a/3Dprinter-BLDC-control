@@ -65,15 +65,25 @@ public:
 
   float get_ws()
   {
+    static float out_last = 0;
     float meas = get_radian();
     float meas2 = get_radian();
+    float out;
+
     if (meas > meas2 && abs(meas - meas2) > 0.5235987)
     {
-      return (1 - abs(meas - meas2)) / sample_time;
+      out = (1 - abs(meas - meas2)) / sample_time;
     }
     else
     {
-      return (meas2 - meas) / sample_time;
+      out = (meas2 - meas) / sample_time;
     }
+
+    if (out < 0 || out > 19)
+    {
+      return out_last;
+    }
+    out_last = out;
+    return out;
   };
 };

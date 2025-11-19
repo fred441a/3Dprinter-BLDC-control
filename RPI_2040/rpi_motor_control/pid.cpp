@@ -13,7 +13,7 @@ public:
     static float integral = 0;
     static float last_e = 0;
     static float pid = 0;
-    static float Kaw = ((Ki/Kp));
+    static float Kaw = ((Ki / Kp));
     float e = ws_wanted - ws_measure;
     float derivative = (Kd * (last_e - e));
     derivative = 0;
@@ -33,9 +33,28 @@ public:
 
     // update terms for next time
     float anti_windup = (Kaw * (pidSat - pidPure));
-    integral += (Ki * e + anti_windup)*0.012;
+    integral += (Ki * e + anti_windup);
 
     last_e = e;
+    if (pidSat < 0)
+    {
+      pidSat = 0;
+    }
     return pidSat;
+  };
+
+  float voltageDis(float ws_measure, float ws_wanted, float T)
+  {
+    static float last_e = 0;
+    static float e_last = 0;
+    static float v_last = 0;
+
+    float e = ws_wanted - ws_measure;
+
+    float v = Kp*e - Kp*e_last + e_last*Ki*T + v_last;
+    v_last = v;
+    e_last = e;
+
+    return v;
   };
 };
