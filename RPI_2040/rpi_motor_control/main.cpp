@@ -6,9 +6,9 @@
 #include "step_response.cpp"
 
 // const uint gpio = 17;
-const float wanted_ws = 10;
-
-const float T = 0.01;
+const float wanted_ws = 15;
+int c = 0;
+const float T = 0.02;
 
 int main()
 {
@@ -17,7 +17,7 @@ int main()
   Encoder *encoder = new Encoder(19);
 
   Motor *motor = new Motor(16, 0.3599);
-  PID *pid = new PID(0.048, 3.2, 0);
+  PID *pid = new PID(0.0511, 1.767, 0);
   /*
   motor->set_voltage(2);
   step_response(encoder);
@@ -45,9 +45,16 @@ int main()
     ws = encoder->get_ws();
     // float voltage = pid->voltage(ws, wanted_ws);
     float voltage2 = pid->voltageDis(ws, wanted_ws, T);
-    printf("with AW: voltage:%f,WS:%f\n", voltage2, ws);
+    printf("%f,:%f,%i\n", voltage2, ws, get_absolute_time());
     motor->set_voltage(voltage2);
     // sleep_ms(1000);
+
+    c = c +1;
+    if (c > 100){
+      return false;
+
+    }
+    
   }
 
   return 0;
