@@ -78,7 +78,7 @@ public:
     {
       out = (meas2 - meas) / sample_time;
     }
-    if (out < 0 || out > 19)
+    if (out < 0 || out > 30)
     {
       return out_last;
     }

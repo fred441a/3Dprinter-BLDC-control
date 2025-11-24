@@ -1,11 +1,11 @@
 s = tf('s');
 
 %time konstant of motor
-tau = 0.09;
+tau = 0.13;
 %riste time of motor
 tr = 0.1758;
 
-K = 14/2.75;
+K = 8.2;
 
 %system sample time
 Ts = 0.01
