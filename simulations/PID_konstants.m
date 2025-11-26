@@ -5,13 +5,13 @@ tau = 0.13;
 %riste time of motor
 tr = 0.1758;
 
-K = 8.2;
+K = 9.1;
 
 %system sample time
-Ts = 0.01
+Ts = 0.01;
 
 %bandwidth of system (in this case the natural freq of the motor wn)
-wb = 1/(10*Ts)
+wb = 1/(10*Ts);
 % dampening faktor (calculated with chatgpt) 5%
 zigma = 0.7 ;
 
@@ -24,12 +24,13 @@ PI = Kp+Ki/s;
 
 %H_c = K_t / ( (K_t*K_e) + (R) * (J*s + B) );
 
-H_c = K/(s*tau+1)
+H_c = K/(s*tau+1);
 system_o = H_c*PI;
-margin(system_o)
 system = (PI*H_c)/(1+H_c*PI);
-%step(system)
+step(system)
 grid on
+%margin(system_o)
+%grid on
 
 system = (PI*H_c)/(1+H_c*PI);
 sys = feedback(PI*H_c,1);

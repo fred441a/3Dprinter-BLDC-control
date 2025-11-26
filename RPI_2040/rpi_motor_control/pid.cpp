@@ -51,7 +51,7 @@ public:
 
     float e = ws_wanted - ws_measure;
 
-    float v = Kp*e - Kp*e_last + e_last*Ki*T + v_last;
+    float v = Kp*e - Kp*e_last + e*Ki*T + v_last;
     v_last = v;
     e_last = e;
 
