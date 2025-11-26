@@ -17,7 +17,7 @@ int main()
   Encoder *encoder = new Encoder(19);
 
   Motor *motor = new Motor(16, 0.3599);
-  PID *pid = new PID(0.09, 1.4286, 0);
+  PID *pid = new PID(0.085, 1.4286, 0);
   /*
   motor->set_voltage(2);
   step_response(encoder);

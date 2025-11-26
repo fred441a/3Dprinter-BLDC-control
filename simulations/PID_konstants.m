@@ -16,8 +16,8 @@ wb = 1/(10*Ts);
 zigma = 0.7 ;
 
 
-Kp = (2*zigma*wb*tau-1)/K
-Ki = (tau*wb^2)/K
+Kp = 0.12%(2*zigma*wb*tau-1)/K
+Ki = 1.428%(tau*wb^2)/K
 Ti = 1/Kp*tau;
 
 PI = Kp+Ki/s;
