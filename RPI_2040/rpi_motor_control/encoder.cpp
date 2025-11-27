@@ -19,8 +19,8 @@ private:
   const float sample_time = 0.01;
   const float sample_time_ms = sample_time * pow(10, 3);
   uint gpio, slice_num;
-  float map_degree(float input) { return 379.346 * input - 7.966; };
-  float map_radians(float input) { return 6.6138 * input - 1.32227; };
+  float map_degree(float input) { return 379.33 * input - 11.056; };
+  float map_radians(float input) { return 6.6712 * input - 0.1929; };
 
   float measure_duty_cycle()
   {
@@ -69,16 +69,17 @@ public:
     float meas = get_radian();
     float meas2 = get_radian();
     float out;
-
+    
     if (meas > meas2 && abs(meas - meas2) > 0.5235987)
     {
-      out = (1 - abs(meas - meas2)) / sample_time;
+      out = (6.2 - abs(meas - meas2)) / sample_time;
     }
     else
     {
       out = (meas2 - meas) / sample_time;
     }
-    if (out < 0 || out > 30)
+    printf("meas1:%f, meas2:%f \n", meas, meas2);
+    if (out < 0 || out > 19)
     {
       return out_last;
     }
