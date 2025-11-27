@@ -18,26 +18,6 @@ int main()
 
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(0.085, 1.4286, 0);
-  /*
-  motor->set_voltage(2);
-  step_response(encoder);
-  */
-
-  /*
-  for (float i = 0; i <= 5; i = i + 0.25)
-  {
-    float ws;
-      motor->set_voltage(i);
-
-      // wait for some time for motor to reach steady speed
-      for (int j = 0; j < 500; j++)
-      {
-      ws = encoder->get_ws(); // read speed after settling
-      }
-
-      printf("i:%f, ws:%f \n", i, ws);
-  }
-  */
 
   while (true)
   {
@@ -53,8 +33,8 @@ int main()
     }
     ws = encoder->get_ws();
     // float voltage = pid->voltage(ws, wanted_ws);
-    float voltage2 = pid->voltageDis(ws, wanted_ws, T);
-    printf("%lld,%f,%f, %f\n", get_absolute_time(), voltage2, ws, wanted_ws);
-    motor->set_voltage(voltage2);
+    float voltage = pid->voltageDis(ws, wanted_ws, T);
+    printf("%lld,%f,%f, %f\n", get_absolute_time(), voltage, ws, wanted_ws);
+    motor->set_voltage(voltage);
   }
 }
