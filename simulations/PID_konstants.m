@@ -16,24 +16,26 @@ wb = 1/(10*Ts);
 zigma = 0.7 ;
 
 
-Kp = 0.12%(2*zigma*wb*tau-1)/K
-Ki = 1.428%(tau*wb^2)/K
+Kp = (2*zigma*wb*tau-1)/K
+Ki = (tau*wb^2)/K
 Ti = 1/Kp*tau;
 
 PI = Kp+Ki/s;
-
+zpk(PI)
 %H_c = K_t / ( (K_t*K_e) + (R) * (J*s + B) );
 
 H_c = K/(s*tau+1);
 system_o = H_c*PI;
 system = (PI*H_c)/(1+H_c*PI);
-step(system)
-grid on
 %margin(system_o)
 %grid on
 
 system = (PI*H_c)/(1+H_c*PI);
 sys = feedback(PI*H_c,1);
+
+noise = 1/(1 + (K*(Kp*s +Ki)/(s*(s*tau+1))));
+displayResult(system)
+zpk(system)
 %step(system)
 %grid on
 %bode(H_c*PI);
