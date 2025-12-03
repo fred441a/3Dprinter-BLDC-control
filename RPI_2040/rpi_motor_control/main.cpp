@@ -25,12 +25,13 @@ int main() {
   //printf("absolute time [uS], PID voltage, measured ws, wantede WS \n");
   while (true) {
     printf("ws:%f \n", encoder->get_wsGood());
+    printf("wsRad:%f \n", encoder->get_wsGood_radBased());
     printf("read:%u \n", encoder->get_ang_raw());
-    // motor->set_voltage(0.75);
+    motor->set_voltage(0.75);
 
     /*
     float ws;
-    if (c > 100) {
+    if (c > 100) {-
       wanted_ws = 9;
     } else {
       wanted_ws = 0;

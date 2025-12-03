@@ -19,8 +19,8 @@ class Encoder
 {
 private:
   const float sample_time = 0.01025;
-  const float fsSample_i2c = 0.015;
-  const float delay = 500;
+  const float fsSample_i2c_ms = 0.24;
+  const float delay_ms = 2;
   const float sample_time_ms = sample_time * pow(10, 3);
   uint gpio, slice_num;
   float map_degree(float input) { return 379.33 * input - 11.056; };
@@ -122,19 +122,46 @@ public:
   float get_wsGood()
   {
     static float ws = 0;
-    uint16_t meas1 = get_ang_raw();
-    sleep_us(500);
-    uint16_t meas2 = get_ang_raw();
+    static float last_ws;
     uint16_t posDiff = 0;
-    if (meas1 > meas2){
-      posDiff = 4096 - meas1 - meas2;
-    }
-    else {
-      posDiff = meas2 - meas1;
-    }
-    map_pos2rad(posDiff);
-    ws = posDiff * 100 /(fsSample_i2c + delay);
-    return ws;
+    uint16_t meas1 = get_ang_raw();
+    sleep_ms(delay_ms);
+    uint16_t meas2 = get_ang_raw();
 
+    if (meas1 > meas2)
+    {
+      ws = last_ws;
+    }
+    else
+    {
+      posDiff = meas2 - meas1;
+      float possDiff_rad = (map_pos2rad(posDiff));
+      printf("possDiff:%u \n", posDiff);
+      ws = possDiff_rad * 1000 / (delay_ms + fsSample_i2c_ms);
+    }
+    last_ws = ws;
+    return ws;
+  };
+
+  float get_wsGood_radBased()
+  {
+    static float ws = 0;
+    static float last_ws;
+    float posDiff = 0;
+    float meas1 = get_rad();
+    sleep_ms(delay_ms);
+    float meas2 = get_rad();
+
+    if (meas1 > meas2)
+    {
+      ws = last_ws;
+    }
+    else
+    {
+      posDiff = meas2 - meas1;
+      ws = posDiff * 1000 / (delay_ms + fsSample_i2c_ms);
+    }
+    last_ws = ws;
+    return ws;
   };
 };
