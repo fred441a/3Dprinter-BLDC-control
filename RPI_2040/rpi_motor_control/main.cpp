@@ -10,38 +10,24 @@ float wanted_ws = 9;
 const float T = 0.01025;
 int c = 1;
 
-float KP = 0.11;
-float KI = 0.5;
+float KP = 0.0901;
+float KI = 1.4;
 float KD = 0;
 
-int main() {
+int main()
+{
   stdio_init_all();
-  Encoder *encoder = new Encoder(19);
+  Encoder *encoder = new Encoder(5, 4);
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(KP, KI, KD);
 
-  encoder->init_i2c();
-
-  //printf("absolute time [uS], PID voltage, measured ws, wantede WS \n");
-  while (true) {
-    printf("ws:%f \n", encoder->get_wsGood());
-    printf("wsRad:%f \n", encoder->get_wsGood_radBased());
-    printf("read:%u \n", encoder->get_ang_raw());
-    motor->set_voltage(0.75);
-
-    /*
+  while (true)
+  {
     float ws;
-    if (c > 100) {-
-      wanted_ws = 9;
-    } else {
-      wanted_ws = 0;
-      c += c++;
-    }
     ws = encoder->get_ws();
-    motor->set_voltage(wanted_ws);
-    float voltage = pid->voltageDis(ws, wanted_ws, T);
-    printf("%lld,%f,%f, %f\n", get_absolute_time(), voltage, ws, wanted_ws);
-    motor->set_voltage(voltage);
-    */
+    float voltage_pid = pid->voltageDis(ws, wanted_ws, T);
+    motor->set_voltage(voltage_pid);
+    printf("speed:%f , voltagePID:%f\n", ws, voltage_pid);
+
   }
 }
