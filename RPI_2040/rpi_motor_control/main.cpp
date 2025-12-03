@@ -17,13 +17,18 @@ float KD = 0;
 int main() {
   stdio_init_all();
   Encoder *encoder = new Encoder(19);
-
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(KP, KI, KD);
 
-  printf("absolute time [uS], PID voltage, measured ws, wantede WS \n");
-  while (true) {
+  encoder->init_i2c();
 
+  //printf("absolute time [uS], PID voltage, measured ws, wantede WS \n");
+  while (true) {
+    printf("ws:%f \n", encoder->get_wsGood());
+    printf("read:%u \n", encoder->get_ang_raw());
+    // motor->set_voltage(0.75);
+
+    /*
     float ws;
     if (c > 100) {
       wanted_ws = 9;
@@ -36,5 +41,6 @@ int main() {
     float voltage = pid->voltageDis(ws, wanted_ws, T);
     printf("%lld,%f,%f, %f\n", get_absolute_time(), voltage, ws, wanted_ws);
     motor->set_voltage(voltage);
+    */
   }
 }

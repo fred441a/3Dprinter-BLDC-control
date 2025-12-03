@@ -11,16 +11,21 @@
 #include "hardware/clocks.h"
 #include "hardware/pwm.h"
 #include "pico/stdlib.h"
+#include "hardware/i2c.h"
+#include "pico/binary_info.h"
 
 #pragma once
 class Encoder
 {
 private:
   const float sample_time = 0.01025;
+  const float fsSample_i2c = 0.015;
+  const float delay = 500;
   const float sample_time_ms = sample_time * pow(10, 3);
   uint gpio, slice_num;
   float map_degree(float input) { return 379.33 * input - 11.056; };
   float map_radians(float input) { return 6.6712 * input - 0.1929; };
+  float map_pos2rad(uint16_t input) { return 0.0015 * input; };
 
   float measure_duty_cycle()
   {
@@ -47,6 +52,9 @@ public:
   }
 
   float get_raw() { return measure_duty_cycle(); };
+
+  float get_rad() { return map_pos2rad(get_ang_raw()); };
+
   float get_degree() { return map_degree(measure_duty_cycle()); };
   float get_radian() { return map_radians(measure_duty_cycle()); };
   float get_degPs()
@@ -68,12 +76,12 @@ public:
     static float out_last = 0;
     static float meas = 0;
     float meas2 = get_radian();
-	printf("%f\n",meas2);
+    printf("%f\n", meas2);
     float out;
-    
+
     if (meas > meas2 && abs(meas - meas2) > 0.5235987)
     {
-      out = out_last;// = (6.2 - abs(meas - meas2)) / sample_time;
+      out = out_last; // = (6.2 - abs(meas - meas2)) / sample_time;
     }
     else
     {
@@ -84,7 +92,49 @@ public:
       return out_last;
     }
     out_last = out;
-	meas = meas2;
+    meas = meas2;
     return out;
+  };
+
+  void init_i2c()
+  {
+    i2c_init(i2c_default, 100 * 1000);
+    i2c_set_baudrate(i2c_default, 100 * 1000);
+    gpio_set_function(4, GPIO_FUNC_I2C);
+    gpio_set_function(5, GPIO_FUNC_I2C);
+    gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
+    gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
+    // Make the I2C pins available to picotool
+    bi_decl(bi_2pins_with_func(4, 5, GPIO_FUNC_I2C));
+  };
+
+  uint16_t get_ang_raw()
+  {
+    uint8_t buff[2];
+    uint8_t data = 0x0E;
+    int ret = 0;
+    ret = i2c_write_blocking(i2c_default, 0x36, &data, 1, true);
+    ret = i2c_read_burst_blocking(i2c_default, 0x36, buff, 2);
+    uint16_t raw_angel = ((buff[0] << 8) | buff[1]);
+    return raw_angel;
+  };
+
+  float get_wsGood()
+  {
+    static float ws = 0;
+    uint16_t meas1 = get_ang_raw();
+    sleep_us(500);
+    uint16_t meas2 = get_ang_raw();
+    uint16_t posDiff = 0;
+    if (meas1 > meas2){
+      posDiff = 4096 - meas1 - meas2;
+    }
+    else {
+      posDiff = meas2 - meas1;
+    }
+    map_pos2rad(posDiff);
+    ws = posDiff * 100 /(fsSample_i2c + delay);
+    return ws;
+
   };
 };
