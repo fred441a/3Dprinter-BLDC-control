@@ -6,35 +6,30 @@
 #include "step_response.cpp"
 
 // const uint gpio = 17;
-float wanted_ws = 9;
-const float T = 0.01025;
+float wanted_ws = 12;
+const float T = 0.0105;
 int c = 1;
 
 float KP = 0.11;
-float KI = 0.5;
+float KI = 1.42;
 float KD = 0;
 
-int main() {
+int main()
+{
   stdio_init_all();
-  Encoder *encoder = new Encoder(19);
-
+  Encoder *encoder = new Encoder(5, 4);
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(KP, KI, KD);
-
-  printf("absolute time [uS], PID voltage, measured ws, wantede WS \n");
-  while (true) {
-
+  sleep_ms(5000);
+  printf("begin");
+  while (true)
+  {
     float ws;
-    if (c > 100) {
-      wanted_ws = 9;
-    } else {
-      wanted_ws = 0;
-      c += c++;
-    }
+    static float voltage_pid = 0;
+    printf("%lld,%f,%f \n", get_absolute_time(), ws, voltage_pid);
+
     ws = encoder->get_ws();
-    motor->set_voltage(wanted_ws);
-    float voltage = pid->voltageDis(ws, wanted_ws, T);
-    printf("%lld,%f,%f, %f\n", get_absolute_time(), voltage, ws, wanted_ws);
-    motor->set_voltage(voltage);
+    voltage_pid = pid->voltageDis(ws, wanted_ws, T);
+    motor->set_voltage(voltage_pid);
   }
 }
