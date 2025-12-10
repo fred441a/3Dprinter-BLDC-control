@@ -6,7 +6,7 @@
 #include "step_response.cpp"
 
 // const uint gpio = 17;
-float wanted_ws = 9.5;
+float wanted_ws = 11.1;
 const float T = 0.010;
 
 static float slow_rise = 0;
@@ -20,7 +20,7 @@ float KD = 0;
 
 
 // slow start function:
-bool slowStart(Encoder *encoder, Motor *motor, PID *pid,  float T,float wanted_ws, float ws, float slow_rise)
+bool slowStart(Encoder *encoder, Motor *motor, PID *pid,  float T, float wanted_ws, float ws, float slow_rise)
 {
 
   while (true)
@@ -50,16 +50,14 @@ int main()
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(KP, KI, KD);
   sleep_ms(5000);
-  printf("begin");
-  slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
+  printf("TimeMeas1 [us], TimeMeas2[us], angular velocity[rad/s], voltage ['V'] \n");
+  //slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
 
   while (true)
   {
-
-    printf("%lld,%f,%f, \n", get_absolute_time(), ws, voltage_pid);
-
     ws = encoder->get_ws();
     voltage_pid = pid->voltageDis(ws, wanted_ws, T);
     motor->set_voltage(voltage_pid);
+    printf("%f,%f, \n", ws, voltage_pid);
   };
 }
