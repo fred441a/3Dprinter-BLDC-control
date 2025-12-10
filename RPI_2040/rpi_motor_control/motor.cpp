@@ -10,6 +10,7 @@ private:
   const uint count_top = 10000;
   const uint pwm_mult = count_top + 1;
   const uint max_voltage = 6;
+  const float limit = 4.5;
 
 public:
   Motor() { Motor(16, 0.07); };
@@ -35,7 +36,12 @@ public:
       pwm_set_gpio_level(gpio, (uint16_t)0);
       return;
     }
+    //limit for no crazy side extrusion
+    if (v > limit){
+      v = limit;
+    }
     float pwm_perc = (v / max_voltage);
     pwm_set_gpio_level(gpio, (uint16_t)(pwm_perc * pwm_mult));
   };
+
 };

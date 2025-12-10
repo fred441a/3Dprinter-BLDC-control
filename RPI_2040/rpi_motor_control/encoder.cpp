@@ -61,7 +61,7 @@ public:
 
     if (meas1 > meas2)
     {
-      printf("loop around, BEWARE! \n,");
+      printf("loop around BEWARE! \n");
       ws = last_ws;
     }
     else
@@ -100,7 +100,6 @@ public:
   const int delay = 2;
   const int avrTimes = 5;
   float get_ws_avr()
-
   {
     static float ws = 0;
     static uint16_t last_posDiff = 0;
