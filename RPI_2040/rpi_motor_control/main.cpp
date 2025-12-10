@@ -8,20 +8,20 @@
 // const uint gpio = 17;
 float wanted_ws = 9.5;
 const float T = 0.010;
-float slow_rise = 0;
 
-float ws;
+static float slow_rise = 0;
+static float ws = 0;
 static float voltage_pid;
 
 float KP = 0.13;
 float KI = 1.428;
 float KD = 0;
 
+
+
 // slow start function:
-bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float wanted_ws, float T)
+bool slowStart(Encoder *encoder, Motor *motor, PID *pid,  float T,float wanted_ws, float ws, float slow_rise)
 {
-  float slow_rise = 0;
-  float ws;
 
   while (true)
   {
@@ -51,7 +51,7 @@ int main()
   PID *pid = new PID(KP, KI, KD);
   sleep_ms(5000);
   printf("begin");
-  slowStart(encoder, motor, pid, wanted_ws, T);
+  slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
 
   while (true)
   {
