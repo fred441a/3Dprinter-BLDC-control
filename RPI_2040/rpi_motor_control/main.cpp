@@ -50,7 +50,7 @@ int main()
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(KP, KI, KD);
   sleep_ms(5000);
-  printf("TimeMeas1 [us], TimeMeas2[us], angular velocity[rad/s], voltage ['V'] \n");
+  printf("TimeStamp, angular velocity[rad/s], voltage ['V'] \n");
   //slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
 
   while (true)
@@ -58,6 +58,6 @@ int main()
     ws = encoder->get_ws();
     voltage_pid = pid->voltageDis(ws, wanted_ws, T);
     motor->set_voltage(voltage_pid);
-    printf("%f,%f, \n", ws, voltage_pid);
+    printf("%lld,%f,%f, \n", get_absolute_time(), ws, voltage_pid);
   };
 }

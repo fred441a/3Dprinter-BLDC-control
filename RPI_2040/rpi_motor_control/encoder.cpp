@@ -19,7 +19,6 @@ class Encoder
 {
 private:
   const uint SDA, SCL;
-  const float fsSample_i2c_ms = 0.571;
   const float delay_us = 9430;
   float map_pos2rad(uint16_t input) { return 0.0015 * input; };
   const int baudRate = 100000;
@@ -56,10 +55,8 @@ public:
     static float last_ws;
     uint16_t posDiff = 0;
     uint16_t meas1 = get_ang_raw();
-    printf("%lld,", get_absolute_time());
     sleep_us(delay_us);
     uint16_t meas2 = get_ang_raw();
-    printf("%lld,", get_absolute_time());
 
     if (meas1 > meas2)
     {
