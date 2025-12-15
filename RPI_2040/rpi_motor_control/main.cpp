@@ -6,8 +6,10 @@
 #include "step_response.cpp"
 
 // const uint gpio = 17;
-float wanted_ws = 11.1;
-const float T = 0.010;
+const float ws_locked = 4.2;
+float wanted_ws = 0.5;
+
+const float T = 0.0107;
 
 static float slow_rise = 0;
 static float ws = 0;
@@ -16,7 +18,6 @@ static float voltage_pid;
 float KP = 0.13;
 float KI = 1.428;
 float KD = 0;
-
 
 
 // slow start function:
@@ -31,8 +32,7 @@ bool slowStart(Encoder *encoder, Motor *motor, PID *pid,  float T, float wanted_
 
     printf("slowStart,%lld,%f,%f,%f\n", get_absolute_time(), ws, slow_rise, voltage_pid);
 
-    sleep_ms(200);
-    slow_rise += 0.1f;
+    slow_rise += 0.00001f;
 
     if (slow_rise >= wanted_ws)
     {
@@ -43,6 +43,7 @@ bool slowStart(Encoder *encoder, Motor *motor, PID *pid,  float T, float wanted_
   }
 }
 
+
 int main()
 {
   stdio_init_all();
@@ -50,14 +51,21 @@ int main()
   Motor *motor = new Motor(16, 0.3599);
   PID *pid = new PID(KP, KI, KD);
   sleep_ms(5000);
-  printf("TimeStamp, angular velocity[rad/s], voltage ['V'] \n");
+  printf("TimeStamp, angular velocity[rad/s], voltage ['V'], wanted_ws \n");
   //slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
 
   while (true)
   {
+    
+    if(wanted_ws < ws_locked){
+      wanted_ws += 0.005f;
+    }
+    
+
     ws = encoder->get_ws();
     voltage_pid = pid->voltageDis(ws, wanted_ws, T);
     motor->set_voltage(voltage_pid);
-    printf("%lld,%f,%f, \n", get_absolute_time(), ws, voltage_pid);
+    printf("%lld,%f,%f,%f \n", get_absolute_time(), ws, voltage_pid, wanted_ws);
+
   };
 }
