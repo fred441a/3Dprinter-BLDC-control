@@ -49,8 +49,7 @@ bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
     printf("slowStart,%lld,%f,%f,%f\n", get_absolute_time(), ws, slow_rise,
            voltage_pid);
 
-    sleep_ms(200);
-    slow_rise += 0.1f;
+    slow_rise += 0.00001f;
 
     if (slow_rise >= wanted_ws) {
       wanted_ws = slow_rise;
