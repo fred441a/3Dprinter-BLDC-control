@@ -5,7 +5,6 @@
  */
 
 #include <cstdio>
-#include <math.h>
 #include <sys/types.h>
 
 #include "hardware/clocks.h"
@@ -19,8 +18,7 @@ class Encoder
 {
 private:
   const uint SDA, SCL;
-  const float fsSample_i2c_ms = 0.571;
-  const float delay_ms = 9.43;
+  const float delay_us = 9430;
   float map_pos2rad(uint16_t input) { return 0.0015 * input; };
   const int baudRate = 100000;
 
@@ -56,20 +54,19 @@ public:
     static float last_ws;
     uint16_t posDiff = 0;
     uint16_t meas1 = get_ang_raw();
-    sleep_ms(delay_ms);
+    sleep_us(delay_us);
     uint16_t meas2 = get_ang_raw();
 
     if (meas1 > meas2)
     {
-      printf("loop around, BEWARE! \n,");
       ws = last_ws;
     }
     else
     {
       posDiff = meas2 - meas1;
-      //printf("%u, ", posDiff);
+      // printf("%u, ", posDiff);
       float possDiff_rad = (map_pos2rad(posDiff));
-      ws = possDiff_rad * 1000 / (delay_ms + fsSample_i2c_ms);
+      ws = possDiff_rad * 1000 / (10);
     }
     last_ws = ws;
     return ws;
@@ -97,36 +94,5 @@ public:
     return ws;
   };
 */
-  const int delay = 2;
-  const int avrTimes = 5;
-  float get_ws_avr()
-
-  {
-    static float ws = 0;
-    static uint16_t last_posDiff = 0;
-    uint16_t posDiff = 0;
-    uint16_t posAvr = 0;
-
-    for (int i = 0; i < avrTimes; i++)
-    {
-      float meas1 = get_ang_raw();
-      sleep_ms(delay);
-      float meas2 = get_ang_raw();
-
-      if (meas1 > meas2)
-      {
-        posDiff = last_posDiff;
-      }
-      else
-      {
-        posDiff = meas2 - meas1;
-      }
-      posAvr = posAvr + posDiff;
-      last_posDiff = posDiff;
-    }
-    printf("posDiff:%u", posAvr);
-    ws = (map_pos2rad(posAvr)) * 1000 / ((delay + fsSample_i2c_ms) * avrTimes);
-
-    return ws;
-  };
+  
 };

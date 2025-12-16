@@ -1,48 +1,61 @@
-#include "crc.cpp"
 #include "encoder.cpp"
 #include "motor.cpp"
-#include "pico/cyw43_arch.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "pid.cpp"
+#include "protokol.cpp"
 #include "step_response.cpp"
-#include <mutex>
 
 // const uint gpio = 17;
-std::mutex *ws_lock = new std::mutex;
-float wanted_ws = 12;
+
+std::queue<float> ws_recieved;
+std::queue<bool> alarm_queue;
+float wanted_ws = 7.2;
 const float T = 0.0105;
 int c = 1;
 
-float KP = 0.11;
-float KI = 1.42;
+static float slow_rise = 0;
+static float ws = 0;
+static float voltage_pid;
+
+float KP = 0.13;
+float KI = 1.428;
 float KD = 0;
 
-#pragma pack(0)
-struct Rx_Packet {
-  int16_t ws;
-  uint8_t crc;
-};
-
 void core1_main() {
-  cyw43_arch_init();
-  cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, true);
-  printf("starting core2");
 
-  uart_init(uart1, 115200);
-  gpio_set_function(8, UART_FUNCSEL_NUM(uart1, 0));
-  gpio_set_function(9, UART_FUNCSEL_NUM(uart1, 1));
+uint16_t value = 0x0000;
+uint16_t second_value = 0xECC2;
+char crc = CRC8((const char *)&value, 2);
+char crc2 = CRC8((const char *)&second_value, 2);
+printf("%04x%02x\n", value, crc);
+printf("%04x%02x\n", second_value, crc2);
 
-  // struct Rx_Packet send;
-  //  send.ws = 115;
-  //  send.crc = CRC8((const char *)&send, 2);
-  char recieve[3];
+
+  Protokol *pr = new Protokol(&ws_recieved, &alarm_queue);
+  pr->read_write_loop();
+}
+
+// slow start function:
+bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
+               float wanted_ws, float ws, float slow_rise) {
 
   while (true) {
-    if (uart_is_readable(uart1)) {
-      uart_read_blocking(uart1, (uint8_t *)&recieve, 3);
-      printf("%i\n", (int)((recieve[2] << 8) | recieve[1]));
+    ws = encoder->get_ws();
+    voltage_pid = pid->voltageDis(ws, slow_rise, T);
+    motor->set_voltage(voltage_pid);
+
+    printf("slowStart,%lld,%f,%f,%f\n", get_absolute_time(), ws, slow_rise,
+           voltage_pid);
+
+    sleep_ms(200);
+    slow_rise += 0.1f;
+
+    if (slow_rise >= wanted_ws) {
+      wanted_ws = slow_rise;
+      printf("done with slow start\n");
+      return true;
     }
   }
 }
@@ -52,15 +65,21 @@ int main() {
   multicore_launch_core1(core1_main);
   Encoder *encoder = new Encoder(5, 4);
   Motor *motor = new Motor(16, 0.3599);
-  PID *pid = new PID(KP, KI, KD);
-  sleep_ms(5000);
+  PID *pid = new PID(KP, KI, KD, &alarm_queue);
+  printf("TimeStamp, angular velocity[rad/s], voltage ['V'] \n");
+  // slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
+
   while (true) {
     float ws;
     static float voltage_pid = 0;
-    // printf("%lld,%f,%f \n", get_absolute_time(), ws, voltage_pid);
 
     ws = encoder->get_ws();
+    if (!ws_recieved.empty()) {
+      wanted_ws = ws_recieved.front();
+      ws_recieved.pop();
+    }
     voltage_pid = pid->voltageDis(ws, wanted_ws, T);
     motor->set_voltage(voltage_pid);
-  }
+    printf("time (us): %lld, wanted_ws :%f\n", get_absolute_time(), wanted_ws);
+  };
 }
