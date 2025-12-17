@@ -10,7 +10,7 @@ private:
   const uint count_top = 10000;
   const uint pwm_mult = count_top + 1;
   const uint max_voltage = 6;
-  const float limit = 4.5;
+  const float limit = 3;
 
 public:
   Motor() { Motor(16, 0.07); };
