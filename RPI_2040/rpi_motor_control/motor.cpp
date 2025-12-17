@@ -36,7 +36,12 @@ public:
       pwm_set_gpio_level(gpio, (uint16_t)0);
       return;
     }
+    //limit for no crazy side extrusion
+    if (v > limit){
+      v = limit;
+    }
     float pwm_perc = (v / max_voltage);
     pwm_set_gpio_level(gpio, (uint16_t)(pwm_perc * pwm_mult));
   };
+
 };

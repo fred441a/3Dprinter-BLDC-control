@@ -5,7 +5,6 @@
  */
 
 #include <cstdio>
-#include <math.h>
 #include <sys/types.h>
 
 #include "hardware/clocks.h"
@@ -19,15 +18,15 @@ class Encoder
 {
 private:
   const uint SDA, SCL;
-  const float fsSample_i2c_ms = 0.24;
-  const float delay_ms = 10;
+  const float delay_us = 9430;
   float map_pos2rad(uint16_t input) { return 0.0015 * input; };
+  const int baudRate = 100000;
 
 public:
   Encoder(uint SCL, uint SDA) : SCL(SCL), SDA(SDA)
   {
-    i2c_init(i2c_default, 100 * 1000);
-    i2c_set_baudrate(i2c_default, 100 * 1000);
+    i2c_init(i2c_default, baudRate);
+    i2c_set_baudrate(i2c_default, baudRate);
     gpio_set_function(SDA, GPIO_FUNC_I2C);
     gpio_set_function(SCL, GPIO_FUNC_I2C);
     gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
@@ -55,7 +54,7 @@ public:
     static float last_ws;
     uint16_t posDiff = 0;
     uint16_t meas1 = get_ang_raw();
-    sleep_ms(delay_ms);
+    sleep_us(delay_us);
     uint16_t meas2 = get_ang_raw();
 
     if (meas1 > meas2)
@@ -65,13 +64,14 @@ public:
     else
     {
       posDiff = meas2 - meas1;
+      // printf("%u, ", posDiff);
       float possDiff_rad = (map_pos2rad(posDiff));
-      ws = possDiff_rad * 1000 / (delay_ms + fsSample_i2c_ms);
+      ws = possDiff_rad * 1000 / (10);
     }
     last_ws = ws;
     return ws;
   };
-
+  /*
   float get_ws_rad()
   {
     static float ws = 0;
@@ -93,4 +93,6 @@ public:
     last_ws = ws;
     return ws;
   };
+*/
+  
 };
