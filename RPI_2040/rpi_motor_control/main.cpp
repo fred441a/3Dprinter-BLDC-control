@@ -56,10 +56,12 @@ bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
 }
 
 int main() {
+  sleep_ms(50000);
+  printf("Are you ready \n");
   stdio_init_all();
   multicore_launch_core1(core1_main);
   Encoder *encoder = new Encoder(5, 4);
-  Motor *motor = new Motor(16, 0.3599);
+  Motor *motor = new Motor(17, 16, 15, true, 0.3599);
   PID *pid = new PID(KP, KI, KD, &alarm_queue);
   printf("TimeStamp, angular velocity[rad/s], voltage ['V'] \n");
   // slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
