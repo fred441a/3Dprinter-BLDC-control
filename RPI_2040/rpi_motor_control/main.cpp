@@ -60,6 +60,8 @@ bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
 }
 
 int main() {
+  sleep_ms(50000);
+  printf("Are you ready \n");
   stdio_init_all();
   multicore_launch_core1(core1_main);
   Encoder *encoder = new Encoder(5, 4);

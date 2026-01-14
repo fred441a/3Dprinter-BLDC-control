@@ -1,5 +1,6 @@
 #include "hardware/clocks.h"
 #include "hardware/pwm.h"
+#include "hardware/gpio.h"
 #include <cstdio>
 #include <sys/types.h>
 
