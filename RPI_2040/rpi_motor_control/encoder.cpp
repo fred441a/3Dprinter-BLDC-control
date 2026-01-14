@@ -5,6 +5,7 @@
  */
 
 #include <cstdio>
+#include <math.h>
 #include <sys/types.h>
 
 #include "hardware/clocks.h"
