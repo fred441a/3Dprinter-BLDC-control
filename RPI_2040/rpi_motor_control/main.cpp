@@ -33,36 +33,15 @@ void core1_main() {
   stepRadCalc->loop();
 }
 
-// slow start function:
-bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
-               float wanted_ws, float ws, float slow_rise) {
-
-  while (true) {
-    ws = encoder->get_ws();
-    voltage_pid = pid->voltageDis(ws, slow_rise, T);
-    motor->set_voltage(voltage_pid);
-
-    printf("slowStart,%lld,%f,%f,%f\n", get_absolute_time(), ws, slow_rise,
-           voltage_pid);
-
-    slow_rise += 0.00001f;
-
-    if (slow_rise >= wanted_ws) {
-      wanted_ws = slow_rise;
-      printf("done with slow start\n");
-      return true;
-    }
-  }
-}
 
 int main() {
   sleep_ms(50000);
-  printf("Are you ready \n");
+  printf("Are you ready? \n");
   stdio_init_all();
   multicore_launch_core1(core1_main);
   Encoder *encoder = new Encoder(5, 4);
-  Motor *motor = new Motor(17, 16, 15, true, 0.3599);
-  PID *pid = new PID(KP, KI, KD, &alarm_queue);
+  Motor *motor = new Motor(16, 17, 15, true);
+  PID *pid = new PID(KP, KI, KD);
   printf("TimeStamp, angular velocity[rad/s], voltage ['V'] \n");
   // slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
 
