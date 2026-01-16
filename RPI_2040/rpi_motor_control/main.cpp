@@ -5,6 +5,7 @@
 #include "pico/time.h"
 #include "pid.cpp"
 #include "protokol.cpp"
+#include "step.cpp"
 #include "step_response.cpp"
 
 // const uint gpio = 17;
@@ -24,17 +25,8 @@ float KI = 1.428;
 float KD = 0;
 
 void core1_main() {
-
-uint16_t value = 0x0000;
-uint16_t second_value = 0xECC2;
-char crc = CRC8((const char *)&value, 2);
-char crc2 = CRC8((const char *)&second_value, 2);
-printf("%04x%02x\n", value, crc);
-printf("%04x%02x\n", second_value, crc2);
-
-
-  Protokol *pr = new Protokol(&ws_recieved, &alarm_queue);
-  pr->read_write_loop();
+  Step *measure_step = new Step(&ws_recieved, &alarm_queue);
+  measure_step->loop();
 }
 
 // slow start function:
@@ -60,16 +52,13 @@ bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
 }
 
 int main() {
-  sleep_ms(50000);
-  printf("Are you ready \n");
   stdio_init_all();
   multicore_launch_core1(core1_main);
+  sleep_us(1000);
+  printf("godmorgen");
   Encoder *encoder = new Encoder(5, 4);
   Motor *motor = new Motor(17, 16, 15, true, 0.3599);
   PID *pid = new PID(KP, KI, KD, &alarm_queue);
-  printf("TimeStamp, angular velocity[rad/s], voltage ['V'] \n");
-  // slowStart(encoder, motor, pid, T, wanted_ws, ws, slow_rise);
-
   while (true) {
     float ws;
     static float voltage_pid = 0;
@@ -81,6 +70,5 @@ int main() {
     }
     voltage_pid = pid->voltageDis(ws, wanted_ws, T);
     motor->set_voltage(voltage_pid);
-    printf("time (us): %lld, wanted_ws :%f\n", get_absolute_time(), wanted_ws);
   };
 }
