@@ -1,17 +1,16 @@
 #include "encoder.cpp"
 #include "motor.cpp"
 #include "pico/multicore.h"
-#include "pico/util/queue.h"
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "pid.cpp"
+#include "protokol.cpp"
 #include "step_response.cpp"
-#include "step_to_rad.cpp"
 
 // const uint gpio = 17;
 
-queue_t ws_recieved;
-queue_t alarm_queue;
+std::queue<float> ws_recieved;
+std::queue<bool> alarm_queue;
 float wanted_ws = 7.2;
 const float T = 0.0105;
 int c = 1;
@@ -25,12 +24,17 @@ float KI = 1.428;
 float KD = 0;
 
 void core1_main() {
-  queue_init(&ws_recieved, sizeof(float), 10);
-  queue_init(&alarm_queue, sizeof(bool), 10);
 
-  steps_to_radians *stepRadCalc =
-      new steps_to_radians(&ws_recieved, &alarm_queue);
-  stepRadCalc->loop();
+uint16_t value = 0x0000;
+uint16_t second_value = 0xECC2;
+char crc = CRC8((const char *)&value, 2);
+char crc2 = CRC8((const char *)&second_value, 2);
+printf("%04x%02x\n", value, crc);
+printf("%04x%02x\n", second_value, crc2);
+
+
+  Protokol *pr = new Protokol(&ws_recieved, &alarm_queue);
+  pr->read_write_loop();
 }
 
 // slow start function:
@@ -71,8 +75,9 @@ int main() {
     static float voltage_pid = 0;
 
     ws = encoder->get_ws();
-    if (!queue_is_empty(&ws_recieved)) {
-      queue_remove_blocking(&ws_recieved, &wanted_ws);
+    if (!ws_recieved.empty()) {
+      wanted_ws = ws_recieved.front();
+      ws_recieved.pop();
     }
     voltage_pid = pid->voltageDis(ws, wanted_ws, T);
     motor->set_voltage(voltage_pid);

@@ -39,8 +39,6 @@ if(TARGET tinyusb_device)
 		main.cpp
 	)
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
 
 	# Add pico_stdlib library which aggregates commonly used features
 	target_link_libraries(main pico_stdlib hardware_pwm hardware_i2c pico_cyw43_arch_none pico_multicore)
