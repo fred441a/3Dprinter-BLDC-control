@@ -29,36 +29,15 @@ void core1_main() {
   measure_step->loop();
 }
 
-// slow start function:
-bool slowStart(Encoder *encoder, Motor *motor, PID *pid, float T,
-               float wanted_ws, float ws, float slow_rise) {
-
-  while (true) {
-    ws = encoder->get_ws();
-    voltage_pid = pid->voltageDis(ws, slow_rise, T);
-    motor->set_voltage(voltage_pid);
-
-    printf("slowStart,%lld,%f,%f,%f\n", get_absolute_time(), ws, slow_rise,
-           voltage_pid);
-
-    slow_rise += 0.00001f;
-
-    if (slow_rise >= wanted_ws) {
-      wanted_ws = slow_rise;
-      printf("done with slow start\n");
-      return true;
-    }
-  }
-}
-
 int main() {
   stdio_init_all();
   multicore_launch_core1(core1_main);
   sleep_us(1000);
   printf("godmorgen");
   Encoder *encoder = new Encoder(5, 4);
-  Motor *motor = new Motor(17, 16, 15, true, 0.3599);
-  PID *pid = new PID(KP, KI, KD, &alarm_queue);
+  Motor *motor = new Motor(16, 17, 18, true);
+  PID *pid = new PID(KP, KI, KD);
+
   while (true) {
     float ws;
     static float voltage_pid = 0;

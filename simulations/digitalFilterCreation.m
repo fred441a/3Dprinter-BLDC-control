@@ -2,12 +2,12 @@
 % =========================================
 % GIVEN SPECIFICATIONS
 % =========================================
-Ap = 1;
+Ap = 3;
 Ar = 20;
 
 wp = 11.5;
 wr = 12.5;
-w0 = sqrt((wp*wr))
+w0 = sqrt((wp*wr));
 
 eps = sqrt(10^(0.1*Ap) - 1);
 k   = wp / wr;
@@ -115,5 +115,4 @@ end
 % =========================================
 disp('Analog Elliptic Transfer Function H_a(s):');
 bode(Ha)
-
 
